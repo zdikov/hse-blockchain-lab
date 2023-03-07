@@ -13,6 +13,7 @@ async function main() {
       `https://${network}.infura.io/v3/${process.env.INFURA_API_KEY}`
     )
   );
+
   // Creating a signing account from a private key
   const signer = web3.eth.accounts.privateKeyToAccount(
     process.env.PRIVATE_KEY
@@ -33,13 +34,13 @@ async function main() {
   if (process.argv[2] == "add") {
     tx = contract.methods.addMessage(process.argv[3])
   } else if (process.argv[2] == "delete") {
-    tx = contract.methods.addMessage(process.argv[3])
+    tx = contract.methods.deleteMessage(process.argv[3])
   }
 
   const receipt = await tx
     .send({
       from: signer.address,
-      gas: await tx.estimateGas(),
+      gas: 3 * await tx.estimateGas(),
     })
     .once("transactionHash", (txhash) => {
       console.log(`Mining transaction ...`);
